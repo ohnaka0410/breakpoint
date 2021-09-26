@@ -1,14 +1,14 @@
 import { Box, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
-import type { Breakpoint, Size } from "~/@types";
-import { DeviceList } from "./DeviceList";
+import type { Setting, Size } from "~/@types";
 import { BreakpointCells } from "./BreakpointCells";
+import { DeviceList } from "./DeviceList";
 
 type Props = {
   sizeList: Size[];
-  breakpointList: Breakpoint[];
+  setting: Setting;
 };
 
-export const BreakpointTable: React.VFC<Props> = ({ sizeList, breakpointList }) => {
+export const BreakpointTable: React.VFC<Props> = ({ sizeList, setting: { breakpointList } }) => {
   return (
     <Box borderWidth="1px" borderRadius="lg" overflow="hidden">
       <Table variant="striped">
