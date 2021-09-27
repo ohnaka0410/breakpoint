@@ -1,6 +1,6 @@
-import { SettingsIcon } from "@chakra-ui/icons";
-import { Box, Flex, Grid, Heading, IconButton, useDisclosure } from "@chakra-ui/react";
+import { Box, Flex, Grid, Heading, Icon, IconButton, useDisclosure } from "@chakra-ui/react";
 import { useCallback, useState } from "react";
+import { RiGithubFill, RiSettings5Fill, RiTwitterFill } from "react-icons/ri";
 import type { Setting, Size } from "~/@types";
 import { BreakpointTable } from "~/components/blocks/BreakpointTable";
 import { SettingModal } from "~/components/blocks/SettingModal";
@@ -57,8 +57,31 @@ export const Home: React.VFC<Props> = ({ sizeList }) => {
         <Heading as="h1" size="lg" letterSpacing={"tighter"}>
           Breakpoint Simulator
         </Heading>
-        <IconButton aria-label="Edit" icon={<SettingsIcon />} marginLeft="auto" color="teal" onClick={onOpen} />
-        <SettingModal isOpen={isOpen} onClose={onClose} setting={setting} onSubmit={handleSubmit} />
+        <Grid marginLeft="auto" gap={4} gridTemplateColumns="repeat(3, auto)">
+          <IconButton
+            aria-label="Twitter"
+            as="a"
+            icon={<Icon as={RiTwitterFill} w={6} h={6} />}
+            color="teal"
+            href="https://twitter.com/yuki0410_"
+            target="_blank"
+          />
+          <IconButton
+            aria-label="Github"
+            as="a"
+            icon={<Icon as={RiGithubFill} w={6} h={6} />}
+            color="teal"
+            href="https://github.com/ohnaka0410/breakpoint"
+            target="_blank"
+          />
+          <IconButton
+            aria-label="Edit"
+            icon={<Icon as={RiSettings5Fill} w={6} h={6} />}
+            color="teal"
+            onClick={onOpen}
+          />
+          <SettingModal isOpen={isOpen} onClose={onClose} setting={setting} onSubmit={handleSubmit} />
+        </Grid>
       </Flex>
       <Box padding="4">
         <BreakpointTable sizeList={sizeList} setting={setting} />
