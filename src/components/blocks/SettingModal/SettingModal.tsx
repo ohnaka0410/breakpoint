@@ -1,4 +1,5 @@
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import type { Breakpoint, Setting } from "~/@types";
 import { BreakpointEditForm } from "./BreakpointEditForm";
@@ -10,8 +11,9 @@ type Props = {
   onSubmit: (setting: Setting) => void;
 };
 
-export const SettingModal: React.VFC<Props> = ({ isOpen, onClose, setting, onSubmit }) => {
+export const SettingModal: React.VFC<Props> = ({ isOpen, onClose, setting }) => {
   const [value, setValue] = useState<Setting>(setting);
+  const router = useRouter();
 
   const handleChangeBreakpoint = useCallback((callback: (prev: Breakpoint[]) => Breakpoint[]) => {
     setValue((prev: Setting): Setting => {
@@ -23,8 +25,28 @@ export const SettingModal: React.VFC<Props> = ({ isOpen, onClose, setting, onSub
   }, []);
 
   const handleSubmit = useCallback(() => {
-    onSubmit(value);
-  }, [onSubmit, value]);
+    router.push({
+      pathname: router.pathname,
+      query: {
+        ...value.breakpointList.reduce<{ "bp.min": string[]; "bp.label": string[] }>(
+          (
+            acc: { "bp.min": string[]; "bp.label": string[] },
+            { min, label }: Breakpoint
+          ): { "bp.min": string[]; "bp.label": string[] } => {
+            return {
+              ...acc,
+              "bp.min": [...acc["bp.min"], String(min)],
+              "bp.label": [...acc["bp.label"], label],
+            };
+          },
+          {
+            "bp.min": [],
+            "bp.label": [],
+          }
+        ),
+      },
+    });
+  }, [router, value.breakpointList]);
 
   useEffect(() => {
     if (isOpen !== true) {

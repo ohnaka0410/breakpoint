@@ -1,9 +1,10 @@
 import { Box, Flex, Grid, Heading, Icon, IconButton, useDisclosure } from "@chakra-ui/react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { RiGithubFill, RiSettings5Fill, RiTwitterFill } from "react-icons/ri";
-import type { Setting, Size } from "~/@types";
+import type { Breakpoint, Setting, Size } from "~/@types";
 import { BreakpointTable } from "~/components/blocks/BreakpointTable";
 import { SettingModal } from "~/components/blocks/SettingModal";
+import { useRouter } from "next/router";
 
 export type Props = {
   sizeList: Size[];
@@ -39,9 +40,49 @@ const defaultSetting: Setting = {
 };
 
 export const Home: React.VFC<Props> = ({ sizeList }) => {
+  const router = useRouter();
+
   const [setting, setSetting] = useState<Setting>(defaultSetting);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  useEffect(() => {
+    const query = router.query;
+    const bpMin = query["bp.min"];
+    const bpLabel = query["bp.label"];
+
+    if (bpMin === undefined) {
+      onClose();
+      return;
+    }
+
+    if (bpLabel === undefined) {
+      onClose();
+      return;
+    }
+
+    const bpMinList = Array.isArray(bpMin) ? bpMin : [bpMin];
+    const bpLabelList = Array.isArray(bpLabel) ? bpLabel : [bpLabel];
+
+    if (bpMinList.length === 0 || bpLabelList.length === 0 || bpMinList.length !== bpLabelList.length) {
+      onClose();
+      return;
+    }
+
+    setSetting((prev: Setting): Setting => {
+      return {
+        ...prev,
+        breakpointList: bpMinList.map<Breakpoint>((min: string, index: number): Breakpoint => {
+          return {
+            min: parseInt(min),
+            label: bpLabelList[index] ?? "",
+          };
+        }),
+      };
+    });
+
+    onClose();
+  }, [onClose, router.query]);
 
   const handleSubmit = useCallback(
     (setting: Setting): void => {
