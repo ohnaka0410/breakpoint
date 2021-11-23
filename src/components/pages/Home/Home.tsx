@@ -96,14 +96,14 @@ export const Home: React.VFC<Props> = ({ sizeList }) => {
     <Grid>
       <Flex as="header" padding={6} bg="teal.500" color="white" alignItems="center" position="sticky" top="0">
         <Heading as="h1" size="lg" letterSpacing={"tighter"}>
-          Breakpoint Simulator
+          Breakpoint
         </Heading>
         <Grid marginLeft="auto" gap={4} gridTemplateColumns="repeat(3, auto)">
           <IconButton
             aria-label="Twitter"
             as="a"
             icon={<Icon as={RiTwitterFill} w={6} h={6} />}
-            color="teal"
+            colorScheme="teal"
             href="https://twitter.com/yuki0410_"
             target="_blank"
           />
@@ -111,7 +111,7 @@ export const Home: React.VFC<Props> = ({ sizeList }) => {
             aria-label="Github"
             as="a"
             icon={<Icon as={RiGithubFill} w={6} h={6} />}
-            color="teal"
+            colorScheme="teal"
             href="https://github.com/ohnaka0410/breakpoint"
             target="_blank"
           />
